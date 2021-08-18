@@ -4,7 +4,7 @@ import ERRORS from './errors.js'
 
 const SEV_PORT = 4003
 const UDP_LOCAL_PORT = 41234
-const UDP_REMOTE_IP = 'localhost'
+const UDP_REMOTE_IP = '47.242.32.120'
 const UDP_REMOTE_PORT = 41235
 
 const DB_HOST = 'mongodb://opDbAdmin:FfdslaewqQQ2@47.244.251.53:27017/'

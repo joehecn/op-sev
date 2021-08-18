@@ -1,5 +1,48 @@
 # OP-SEV
 
+## frp
+47.242.32.120:7001
+41235 7001 7000 6000
+``` bash
+ssh -i /Users/hemiao/pem/m21.cer root@47.242.32.120
+# frps.ini
+[common]
+token = 98692467-37de-409a-9fac-bb2585826f1
+bind_port = 7000
+
+dashboard_port = 7001
+dashboard_user = megaAdmin
+dashboard_pwd = mega0240
+
+#####################################################
+
+ssh -i /Users/hemiao/pem/id_rsa.pem -oPort=6000 root@47.242.32.120
+# ssh frpc.ini
+[common]
+token = 98692467-37de-409a-9fac-bb2585826f1
+server_addr = 47.242.32.120
+server_port = 7000
+
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 22
+remote_port = 6000
+
+# udp frpc.ini
+[common]
+token = 98692467-37de-409a-9fac-bb2585826f1
+server_addr = 47.242.32.120
+server_port = 7000
+
+[udp]
+type = udp
+local_ip = 127.0.0.1
+local_port = 41235
+remote_port = 41235
+
+```
+
 ``` bash
 scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/Dockerfile root@47.242.32.120:/root/op-sev
 scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/package.json root@47.242.32.120:/root/op-sev

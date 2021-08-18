@@ -15,6 +15,7 @@ COPY Dockerfile /server
 COPY package.json /server
 COPY ./src /server/src
 COPY ./public /server/public
+COPY ./t /server/t
 
 # Install app dependencies
 RUN npm install --production

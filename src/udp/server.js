@@ -22,10 +22,11 @@ const initUDPSev = () => {
 
   server.on('message', (msg, rinfo) => {
     const { address, port } = rinfo
+    console.log({ address, port })
+    console.log(msg.toString())
     // 限定只能和定义好的客户端通信
     if (address !== UDP_REMOTE_IP || port !== UDP_REMOTE_PORT) return
     
-    console.log(msg.toString())
   })
 
   server.on('listening', () => {

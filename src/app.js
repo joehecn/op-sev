@@ -11,6 +11,7 @@ import bodyparser from 'koa-bodyparser'
 import {
   lastHandingErrors,
   getDbModel,
+  setSendUDPMsgFunc,
   router
 } from './middlewares/index.js'
 
@@ -28,6 +29,7 @@ app
     }
   }))
   .use(getDbModel)
+  .use(setSendUDPMsgFunc)
   .use(cors({
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization', 'Date'],
     maxAge: 100,

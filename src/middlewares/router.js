@@ -44,6 +44,7 @@ router
 
   .get('/api/v1/vue_api', jwt, async ctx => {
     const data = ctx.querystring
+    ctx.sendUDPMsg(data)
     ctx.body = {
       code: 0,
       data

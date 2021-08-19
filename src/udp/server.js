@@ -1,10 +1,13 @@
+
 import dgram from 'dgram'
 
 import {
-  UDP_LOCAL_PORT,
-  UDP_REMOTE_IP,
-  UDP_REMOTE_PORT
+  UDP_LOCAL_PORT
 } from '../config/index.js'
+
+let udpRemoteIP = ''
+let udpRemotePort = 0
+let udpRemoteOnline = false
 
 const coverMsg = strMsg => {
   const map = {}
@@ -20,8 +23,9 @@ const initUDPSev = () => {
   const server = dgram.createSocket('udp4')
 
   const sendMsg = msg => {
-    server.send(msg, UDP_REMOTE_PORT, UDP_REMOTE_IP, (err, bytes) => {
-      console.log({ UDP_REMOTE_IP, UDP_REMOTE_PORT, err, bytes })
+    if (!udpRemoteOnline) return
+    server.send(msg, udpRemotePort, udpRemoteIP, (err, bytes) => {
+      console.log({ err, bytes })
     })
   }
 
@@ -36,7 +40,20 @@ const initUDPSev = () => {
     const strMsg = msg.toString()
     console.log({ strMsg })
     if (strMsg === 'Test remote UDP server is ready') {
+      udpRemoteIP = address
+      udpRemotePort = port
+      udpRemoteOnline = true
+      console.log('---- client online')
       sendMsg('remote UDP server is ready')
+      return
+    }
+
+    if (strMsg === 'close client') {
+      udpRemoteIP = ''
+      udpRemotePort = 0
+      udpRemoteOnline = false
+
+      console.log('---- client offline')
       return
     }
 
@@ -56,4 +73,4 @@ const initUDPSev = () => {
 
 const sendUDPMsg = initUDPSev()
 
-export default sendUDPMsg
+export { sendUDPMsg }

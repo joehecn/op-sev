@@ -5,7 +5,6 @@
   "main": "src/main.js",
   "type": "module",
   "scripts": {
-    "dev": "set NODE_ENV=dev & node src/main.js",
     "start": "node src/main.js"
   },
   "keywords": [],

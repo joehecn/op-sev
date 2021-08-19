@@ -1,5 +1,5 @@
 
-import sendUDPMsg from '../udp/server.js'
+import { sendUDPMsg } from '../udp/server.js'
 
 const setSendUDPMsgFunc = async (ctx, next) => {
   ctx.sendUDPMsg = sendUDPMsg

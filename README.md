@@ -8,7 +8,6 @@ scp -i C:\Users\HM\op\pem\m21.cer C:\Users\HM\op\op-sev/Dockerfile root@47.242.3
 scp -i C:\Users\HM\op\pem\m21.cer C:\Users\HM\op\op-sev/package.json root@47.242.32.120:/root/op-sev
 scp -i C:\Users\HM\op\pem\m21.cer -r C:\Users\HM\op\op-sev/src root@47.242.32.120:/root/op-sev
 scp -i C:\Users\HM\op\pem\m21.cer -r C:\Users\HM\op\op-sev/public root@47.242.32.120:/root/op-sev
-scp -i C:\Users\HM\op\pem\m21.cer -r C:\Users\HM\op\op-sev/t root@47.242.32.120:/root/op-sev
 
 ssh -i C:\Users\HM\op\pem\m21.cer root@47.242.32.120
 

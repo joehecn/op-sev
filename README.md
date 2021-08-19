@@ -21,6 +21,8 @@ docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/ser
 47.242.32.120:4003
 ```
 
+ssh -i C:\Users\HM\op\pem\id_rsa.pem -oPort=6000 root@47.242.32.120
+
 ## frp
 47.242.32.120:7001
 41235 7001 7000 6000

@@ -42,15 +42,13 @@ router
   .get('/api/v1/clockin/detail', jwt, clockin.findOne)
   .get('/api/v1/clockin/list', jwt, clockin.list)
 
-  // .get('/api/v1/vue_api', jwt, async ctx => {
-  //   const port = vbTcpServerPort // 4200
-  //   const host = vbTcpServerHost // '192.168.1.8'
-  //   const data = await send(port, host, ctx.querystring)
-  //   ctx.body = {
-  //     code: 0,
-  //     data
-  //   }
-  // })
+  .get('/api/v1/vue_api', jwt, async ctx => {
+    const data = ctx.querystring
+    ctx.body = {
+      code: 0,
+      data
+    }
+  })
 
   // .get('/api/v1/vb_state', ctx => {
   //   const { t } = ctx.query

@@ -6,12 +6,22 @@ import {
   UDP_REMOTE_PORT
 } from '../config/index.js'
 
+const coverMsg = strMsg => {
+  const map = {}
+  const arr = strMsg.split('&')
+  arr.forEach(element => {
+    const [key, value] = element.split('=')
+    map[key] = value
+  })
+  return map
+}
+
 const initUDPSev = () => {
   const server = dgram.createSocket('udp4')
 
   const sendMsg = msg => {
     server.send(msg, UDP_REMOTE_PORT, UDP_REMOTE_IP, (err, bytes) => {
-      console.log({ err, bytes })
+      console.log({ UDP_REMOTE_IP, UDP_REMOTE_PORT, err, bytes })
     })
   }
 
@@ -23,10 +33,15 @@ const initUDPSev = () => {
   server.on('message', (msg, rinfo) => {
     const { address, port } = rinfo
     console.log({ address, port })
-    console.log(msg.toString())
-    // 限定只能和定义好的客户端通信
-    if (address !== UDP_REMOTE_IP || port !== UDP_REMOTE_PORT) return
-    
+    const strMsg = msg.toString()
+    console.log({ strMsg })
+    if (strMsg === 'Test remote UDP server is ready') {
+      sendMsg('remote UDP server is ready')
+      return
+    }
+
+    const mapMsg = coverMsg(strMsg)
+    console.log(mapMsg)
   })
 
   server.on('listening', () => {

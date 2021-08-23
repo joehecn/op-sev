@@ -1,13 +1,15 @@
 
 import dgram from 'dgram'
 
-import {
-  UDP_LOCAL_PORT
-} from '../config/index.js'
+import { UDP_LOCAL_PORT } from '../config/index.js'
+
+import emitter from '../util/emitter.js'
 
 let udpRemoteIP = ''
-let udpRemotePort = 0
+let udpRemotePort = ''
 let udpRemoteOnline = false
+let serialPort = ''
+let serialStatus = ''
 
 const coverMsg = strMsg => {
   const map = {}
@@ -39,26 +41,77 @@ const initUDPSev = () => {
     console.log({ address, port })
     const strMsg = msg.toString()
     console.log({ strMsg })
-    if (strMsg === 'Test remote UDP server is ready') {
-      udpRemoteIP = address
-      udpRemotePort = port
-      udpRemoteOnline = true
-      console.log('---- client online')
-      sendMsg('remote UDP server is ready')
-      return
-    }
+    // if (strMsg === 'Test remote UDP server is ready') {
+    //   udpRemoteIP = address
+    //   udpRemotePort = port
+    //   udpRemoteOnline = true
+    //   console.log('---- client online')
+    //   sendMsg('category=remoteUDPServerIsReady&')
+    //   return
+    // }
 
-    if (strMsg === 'close client') {
-      udpRemoteIP = ''
-      udpRemotePort = 0
-      udpRemoteOnline = false
+    // if (strMsg === 'close client') {
+    //   udpRemoteIP = ''
+    //   udpRemotePort = 0
+    //   udpRemoteOnline = false
 
-      console.log('---- client offline')
-      return
-    }
+    //   console.log('---- client offline')
+    //   return
+    // }
 
     const mapMsg = coverMsg(strMsg)
     console.log(mapMsg)
+
+    if (mapMsg.c !== 'a') return
+  
+    udpRemoteIP = address
+    udpRemotePort = port
+    udpRemoteOnline = true
+
+    switch (mapMsg.m) {
+      case 'openclient':
+
+        emitter.emit(mapMsg.t, JSON.stringify(Object.assign({
+          udpRemoteIP,
+          udpRemotePort,
+          udpRemoteOnline
+        }, mapMsg)))
+
+        sendMsg(`c=b&t=n&m=clientback&ip=${udpRemoteIP}&port=${udpRemotePort}`)
+
+        break
+      
+      case 'closeclient':
+
+        udpRemoteIP = ''
+        udpRemotePort = ''
+        udpRemoteOnline = false
+
+        emitter.emit(mapMsg.t, JSON.stringify(Object.assign({
+          udpRemoteIP,
+          udpRemotePort,
+          udpRemoteOnline
+        }, mapMsg)))
+
+        break
+      
+      case 'openport':
+      case 'closeport':
+        serialPort = mapMsg.portnum
+        serialStatus = mapMsg.status
+        emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
+        
+        break
+      
+      case 'versionback':
+      case 'cardback':
+        emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
+        
+        break
+        
+      default:
+        break
+    }
   })
 
   server.on('listening', () => {
@@ -73,4 +126,14 @@ const initUDPSev = () => {
 
 const sendUDPMsg = initUDPSev()
 
-export { sendUDPMsg }
+const getInfo = () => {
+  return {
+    udpRemoteIP,
+    udpRemotePort,
+    udpRemoteOnline,
+    serialPort,
+    serialStatus
+  }
+}
+
+export { sendUDPMsg, getInfo }

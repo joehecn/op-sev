@@ -81,3 +81,15 @@ docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/ser
 
 47.242.32.120:4003
 ```
+
+private function getArr(dx As string)
+    dim args() as string
+    args() = split(dx, "&")
+
+    dim methods() as string
+    methods = split(args(0), "=")
+
+    dim method as string
+    method = methods(1)
+
+end function

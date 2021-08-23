@@ -12,6 +12,10 @@ const CardSchema = new Schema({
     type: String,
     required: true
   },
+  cardType: {
+    type: String,
+    default: 'idi' // idm
+  },
   // 拥有的门 (数组)
   // 門禁
   doorIds: [{

@@ -1,6 +1,15 @@
 # OP-SEV
 
-47.242.32.120:7001
+47.242.32.120:4003
+
+``` bash
+ssh -i /Users/hemiao/pem/m21.cer root@47.242.32.120
+
+scp -i /Users/hemiao/pem/m21.cer root@47.242.32.120:/root/op-sev/Dockerfile /Users/hemiao/joe/v3/op/op-sev
+scp -i /Users/hemiao/pem/m21.cer root@47.242.32.120:/root/op-sev/package.json /Users/hemiao/joe/v3/op/op-sev
+scp -i /Users/hemiao/pem/m21.cer -r root@47.242.32.120:/root/op-sev/src /Users/hemiao/joe/v3/op/op-sev
+scp -i /Users/hemiao/pem/m21.cer -r root@47.242.32.120:/root/op-sev/public /Users/hemiao/joe/v3/op/op-sev
+```
 
 ## windows
 ``` bash
@@ -70,6 +79,9 @@ scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/Dockerfile root@
 scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/package.json root@47.242.32.120:/root/op-sev
 scp -i /Users/hemiao/pem/m21.cer -r /Users/hemiao/joe/v3/op/op-sev/src root@47.242.32.120:/root/op-sev
 scp -i /Users/hemiao/pem/m21.cer -r /Users/hemiao/joe/v3/op/op-sev/public root@47.242.32.120:/root/op-sev
+
+scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/public/iife.t.html root@47.242.32.120:/root/op-sev/public
+scp -i /Users/hemiao/pem/m21.cer /Users/hemiao/joe/v3/op/op-sev/public/es.t.html root@47.242.32.120:/root/op-sev/public
 
 ssh v3
 

@@ -87,21 +87,40 @@ ssh v3
 
 cd op-sev
 
-docker build -t joe/op-sev:1.0.0 .
--p 4003:4003 -p 41234:41234 -p 41235:41235
-docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/server/public -v /"$PWD"/logs:/server/logs --log-opt max-size=100m --log-opt max-file=1 --network host --name op-sev joe/op-sev:1.0.0
+
+
+docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/server/public -v /"$PWD"/logs:/server/logs --log-opt max-size=100m --log-opt max-file=1 --network host --name op-sev joehe/op-sev:1.0.0
 
 47.242.32.120:4003
 ```
 
-private function getArr(dx As string)
-    dim args() as string
-    args() = split(dx, "&")
+``` bash
+docker build -t joehe/op-sev:1.0.2 .
 
-    dim methods() as string
-    methods = split(args(0), "=")
+# publish
+docker push joehe/op-sev:1.0.2
 
-    dim method as string
-    method = methods(1)
+# product
+# docker pull joehe/op-sev:1.0.2
+mkdir -p op-sev/logs
+docker run -d -p 4003:4003 -p 41234:41234 -v /"$PWD"/logs:/server/logs --log-opt max-size=100m --log-opt max-file=1 --network op-net --name op-sev joehe/op-sev:1.0.2
 
-end function
+
+netsh interface portproxy show all
+netsh interface portproxy add v4tov4 listenport=4003 connectaddress=172.29.130.71 connectport=4003 listenaddress=0.0.0.0 protocol=tcp
+```
+
+``` bash
+# redis_master 192.168.1.237
+mkdir -p redis_master/data
+docker run -d -p 6379:6379 -v /"$PWD"/data:/data --network op-net --name redis_master redis --appendonly yes
+
+# redis_slave_0 192.168.10.111
+mkdir -p redis_slave_0/data
+docker run -d -p 6379:6379 -v /"$PWD"/data:/data --network op-net --name redis_slave_0 redis --appendonly yes
+docker exec -it redis_slave_0 bash
+redis-cli
+
+mkdir -p redis_local/data
+docker run -d -p 6380:6379 -v /"$PWD"/data:/data --network op-net --name redis_local redis --appendonly yes
+```

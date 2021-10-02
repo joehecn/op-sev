@@ -103,10 +103,6 @@ router
     }
   })
 
-  // .get('/api/v1/vb_state', ctx => {
-  //   const { t } = ctx.query
-  //   emitter.emit(t, ctx.query)
-  //   ctx.body = 'vb_state'
-  // })
+  .post('/api/v1/lifecycle', jwt, door.lifecycle)
 
 export default router

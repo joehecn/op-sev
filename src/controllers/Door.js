@@ -7,6 +7,16 @@ import {
   list as _list
 } from '../services/Door.js'
 
+import {
+  replaceCard
+} from '../redis/index.js'
+
+import {
+  add as addClockIn
+} from '../services/ClockIn.js'
+
+const doorMap = {}
+
 const add = async ctx => {
   const param = ctx.request.body
   // console.log({ param })
@@ -57,12 +67,42 @@ const findOne = async ctx => {
 
 const list = async ctx => {
   const query = ctx.request.query
-  const data = await _list(query, ctx)
+  console.log({ query })
+  const res = await _list(query, ctx)
 
   ctx.body = {
     code: 0,
     message: '',
-    data
+    data: { list: res, doorMap }
+  }
+}
+
+const _handleMsg = async ({ method, arg }, ctx) => {
+  if (method === 'replaceCard') {
+    await replaceCard(arg, ctx)
+  } else if (method === 'addClockIn') {
+    await addClockIn(arg, ctx)
+  }
+}
+
+const lifecycle = async ctx => {
+  const now = Date.now()
+  const { id, ip, serialPort, count, msgs } = ctx.request.body
+  console.log({ id, ip, serialPort, count, msgs })
+
+  doorMap[ip] = { count, serialPort, now }
+
+  if (msgs) {
+    for (let i = 0, len = msgs.length; i < len; i++) {
+      const msg = msgs[i]
+      await _handleMsg(msg, ctx)
+    }
+  }
+
+  ctx.body = {
+    code: 0,
+    message: '',
+    data: { id }
   }
 }
 
@@ -71,5 +111,6 @@ export {
   remove,
   update,
   findOne,
-  list
+  list,
+  lifecycle
 }

@@ -13,14 +13,14 @@ const DoorSchema = new Schema({
   // 接收消息端口
   receivePort: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
+    // required: true
   },
   // 发送消息端口
   sendPort: {
     type: String,
-    trim: true,
-    required: true
+    trim: true
+    // required: true
   },
   // 門禁編碼
   doorNo: {

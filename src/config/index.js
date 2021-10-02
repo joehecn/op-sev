@@ -1,10 +1,23 @@
 
 import ERRORS from './errors.js'
 
+const NODE_ENV = process.env.NODE_ENV
+
 const SEV_PORT = 4003
 const UDP_LOCAL_PORT = 41234
 
-const DB_HOST = 'mongodb://opDbAdmin:FfdslaewqQQ2@47.244.251.53:27017/'
+let redis = 'redis_master'
+let domain = 'op-db'
+
+if (NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+  redis = 'localhost'
+  domain = '47.244.251.53'
+}
+
+console.log({ NODE_ENV, redis, domain })
+
+const REDIS_URL = `redis://${redis}:6379`
+const DB_HOST = `mongodb://opDbAdmin:FfdslaewqQQ2@${domain}:27017/`
 
 // jwt
 const PASSWORD_SALT = 'salt for one punch, which is salty'
@@ -16,6 +29,8 @@ const getDbConnectStr = dbName => {
 }
 
 export {
+  REDIS_URL,
+
   SEV_PORT,
   // node udp server
   UDP_LOCAL_PORT,

@@ -6,6 +6,8 @@ import { findOne } from '../services/User.js'
 const jwt = async (ctx, next) => {
   const token = ctx.header.authorization || null
 
+  console.log({ token })
+
   if (token === null) throw Error(10004)
 
   const { _id, expire } = getTokenValue(token)

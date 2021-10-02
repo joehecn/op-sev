@@ -8,7 +8,7 @@ const asyncPbkdf2 = password => {
       if (err) {
         reject(err)
       } else {
-        resolve(derivedKey.toString())
+        resolve(derivedKey.toString('hex'))
       }
     })
   })

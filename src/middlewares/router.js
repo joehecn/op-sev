@@ -10,7 +10,7 @@ import * as clockin from '../controllers/ClockIn.js'
 
 import emitter from '../util/emitter.js'
 
-import { getInfo } from '../udp/server.js'
+// import { getInfo } from '../udp/server.js'
 
 let index = 0
 
@@ -68,34 +68,34 @@ router
   .get('/api/v1/clockin/list', jwt, clockin.list)
 
   .get('/api/v1/vue_api', jwt, async ctx => {
-    console.log('---- vue_api in', Date.now())
-    const info = getInfo()
-    if (ctx.querystring === 'm=clientinfo') {
-      ctx.body = {
-        code: 0,
-        data: info
-      }
-      return
-    }
+    // console.log('---- vue_api in', Date.now())
+    // const info = getInfo()
+    // if (ctx.querystring === 'm=clientinfo') {
+    //   ctx.body = {
+    //     code: 0,
+    //     data: info
+    //   }
+    //   return
+    // }
 
-    if (!info.udpRemoteOnline) {
-      ctx.body = {
-        code: 0,
-        data: JSON.stringify({ message: 'UDP client is closed!' })
-      }
-      return
-    }
-    const data = await send(ctx)
+    // if (!info.udpRemoteOnline) {
+    //   ctx.body = {
+    //     code: 0,
+    //     data: JSON.stringify({ message: 'UDP client is closed!' })
+    //   }
+    //   return
+    // }
+    // const data = await send(ctx)
 
-    console.log('---- vue_api out', Date.now())
+    // console.log('---- vue_api out', Date.now())
     ctx.body = {
       code: 0,
-      data
+      data: {}
     }
   })
 
   .get('/api/v1/vue_api_t', jwt, async ctx => {
-    ctx.sendUDPMsg(`$c=b&t=a&${ctx.querystring}`)
+    // ctx.sendUDPMsg(`$c=b&t=a&${ctx.querystring}`)
 
     ctx.body = {
       code: 0,

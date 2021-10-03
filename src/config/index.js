@@ -5,6 +5,7 @@ const NODE_ENV = process.env.NODE_ENV
 
 const SEV_PORT = 4003
 const UDP_LOCAL_PORT = 41234
+const TCP_LOCAL_PORT = 41234
 
 let redis = 'redis_master'
 let domain = 'op-db'
@@ -34,6 +35,7 @@ export {
   SEV_PORT,
   // node udp server
   UDP_LOCAL_PORT,
+  TCP_LOCAL_PORT,
   // jwt
   PASSWORD_SALT,
   JWT_EXPIRE,

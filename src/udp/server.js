@@ -1,4 +1,5 @@
 
+console.log('------------------- 这段文字不该出现')
 import dgram from 'dgram'
 
 import { UDP_LOCAL_PORT } from '../config/index.js'

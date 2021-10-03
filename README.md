@@ -95,15 +95,14 @@ docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/ser
 ```
 
 ``` bash
-docker build -t joehe/op-sev:1.0.2 .
+docker build -t joehe/op-sev:1.0.4 .
 
 # publish
-docker push joehe/op-sev:1.0.2
+docker push joehe/op-sev:1.0.4
 
 # product
-# docker pull joehe/op-sev:1.0.2
 mkdir -p op-sev/logs
-docker run -d -p 4003:4003 -p 41234:41234 -v /"$PWD"/logs:/server/logs --log-opt max-size=100m --log-opt max-file=1 --network op-net --name op-sev joehe/op-sev:1.0.2
+docker run -d -p 4003:4003 -p 41234:41234 -v /"$PWD"/logs:/server/logs --log-opt max-size=100m --log-opt max-file=1 --network op-net --name op-sev joehe/op-sev:1.0.4
 
 
 netsh interface portproxy show all

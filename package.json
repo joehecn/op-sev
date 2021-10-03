@@ -1,6 +1,6 @@
 {
   "name": "op-sev",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "",
   "main": "src/main.js",
   "type": "module",
@@ -12,6 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "byte": "^2.0.0",
+    "debug": "^4.3.2",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",

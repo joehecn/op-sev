@@ -6,6 +6,16 @@ import { CONNECT } from './tcp-sev/lib/constants.js'
 
 const connMap = new Map()
 
+const coverMsg = strMsg => {
+  const map = {}
+  const arr = strMsg.split('&')
+  arr.forEach(element => {
+    const [key, value] = element.split('=')
+    map[key] = value
+  })
+  return map
+}
+
 export const initTCPServer = () => {
   net.createServer(socket => {
     const conn = new Connection({ socket })
@@ -34,7 +44,26 @@ export const initTCPServer = () => {
   
     // 收到packet
     conn.on('packet', ({ reqId, body }) => {
-      console.log({ reqId, body })
+      const mapMsg = coverMsg(body)
+      console.log({ reqId, body, mapMsg })
+
+      if (mapMsg.c !== 'a') return
+
+      switch (mapMsg.m) {
+        case 'openport':
+        case 'closeport':
+          conn.serialPort = mapMsg.portnum
+          conn.serialStatus = mapMsg.status
+
+          emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
+          break
+        // case 'versionback':
+        // case 'cardback':
+        //   emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
+        //   break
+        default:
+          break
+      }
     })
   
     conn.on('close', () => {

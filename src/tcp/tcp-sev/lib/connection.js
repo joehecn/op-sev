@@ -56,6 +56,9 @@ export default class Connection extends EventEmitter {
     this._heartbeatTimeoutCount = 0
     this._pendingTimers = []
 
+    this._serialPort = null
+    this._serialStatus = 'close'
+
     this._connect()
   }
 
@@ -90,6 +93,20 @@ export default class Connection extends EventEmitter {
       }
     }
     return this._options.port
+  }
+
+  get serialPort() {
+    return this._serialPort
+  }
+  set serialPort(val) {
+    this._serialPort = val
+  }
+
+  get serialStatus() {
+    return this._serialStatus
+  }
+  set serialStatus(val) {
+    this._serialStatus = val
   }
 
   _connect() {
@@ -180,7 +197,6 @@ export default class Connection extends EventEmitter {
 
     // 服务端启动心跳检测
     if (this._isServer) {
-      console.log('---- 服务端启动心跳检测')
       this._setupHeartbeatTimer()
     }
   }

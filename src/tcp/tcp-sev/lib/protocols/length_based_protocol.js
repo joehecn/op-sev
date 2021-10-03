@@ -64,7 +64,6 @@ export default class LengthBasedProtocol extends Protocol {
   }
 
   read(chunk) {
-    console.log({ chunk })
     chunk = this.parse(chunk)
     if (!chunk) {
       return
@@ -82,7 +81,6 @@ export default class LengthBasedProtocol extends Protocol {
     if (offset - packetLength >= packetBodyLength) {
       // 已经收到完整的packet
       const body = this._parsePacketBody(packetLength, packetLength + packetBodyLength)
-      console.log({ body })
       this.packet.body = body
       this.emit('packet', this.packet)
 

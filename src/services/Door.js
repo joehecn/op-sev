@@ -1,5 +1,8 @@
 
-import { set, del } from '../redis/index.js'
+import {
+  set as setDoor,
+  del as delDoor
+} from '../redis/index.js'
 
 const add = async (param, ctx) => {
   const model = await ctx.model('Door')
@@ -7,7 +10,7 @@ const add = async (param, ctx) => {
   const created = await res.save()
 
   const { ip } = created
-  await set(`door.${ip}`, JSON.stringify(created))
+  await setDoor(`door.${ip}`, JSON.stringify(created))
 
   return created._doc
 }
@@ -18,7 +21,7 @@ const remove = async (query, ctx) => {
 
   if (res) {
     const { ip } = res
-    await del(`door.${ip}`)
+    await delDoor(`door.${ip}`)
   }
 
   return res
@@ -32,7 +35,7 @@ const update = async (query, set, ctx) => {
 
   if (res) {
     const { ip } = res
-    await set(`door.${ip}`, JSON.stringify(res))
+    await setDoor(`door.${ip}`, JSON.stringify(res))
   }
 
   return res

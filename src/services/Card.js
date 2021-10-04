@@ -1,5 +1,8 @@
 
-import { set, del } from '../redis/index.js'
+import {
+  set as setCard,
+  del as delCard
+} from '../redis/index.js'
 
 const add = async (param, ctx) => {
   const model = await ctx.model('Card')
@@ -7,7 +10,7 @@ const add = async (param, ctx) => {
   const created = await res.save()
 
   const { cardNo } = created
-  await set(`card.${cardNo}`, JSON.stringify(created))
+  await setCard(`card.${cardNo}`, JSON.stringify(created))
 
   return created._doc
 }
@@ -18,7 +21,7 @@ const remove = async (query, ctx) => {
 
   if (res) {
     const { cardNo } = res
-    await del(`card.${cardNo}`)
+    await delCard(`card.${cardNo}`)
   }
 
   return res
@@ -32,7 +35,7 @@ const update = async (query, set, ctx) => {
 
   if (res) {
     const { cardNo } = res
-    await set(`card.${cardNo}`, JSON.stringify(res))
+    await setCard(`card.${cardNo}`, JSON.stringify(res))
   }
 
   return res

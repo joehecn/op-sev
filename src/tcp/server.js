@@ -40,6 +40,9 @@ export const initTCPServer = () => {
       
       const _id = `${remoteAddress}:${remotePort}`
       connMap.set(_id, conn)
+
+      // 通知 web 前端
+      emitter.emit('a', JSON.stringify({ m: 'openclient' }))
     })
   
     // 收到packet
@@ -84,6 +87,9 @@ export const initTCPServer = () => {
       })
   
       connMap.delete(`${remoteAddress}:${remotePort}`, conn)
+
+      // 通知 web 前端
+      emitter.emit('a', JSON.stringify({ m: 'closeclient' }))
     })
   
     conn.on('error', err => {

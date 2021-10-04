@@ -28,7 +28,7 @@ const findOne = async (query, ctx) => {
 
 const list = async (query, ctx) => {
   const model = await ctx.model('CardHistory')
-  const res = await model.find(query)
+  const res = await model.find(query).sort({ _id: -1 })
   return res
 }
 

@@ -74,3 +74,17 @@ export const replaceCard = async ({ oldCardId, newCardId, newCardType, card }, c
     userInfo: card.userInfo
   }, ctx)
 }
+
+export const set = async () => {
+  const client = createClient({ url })
+  await client.connect()
+
+  await client.set(key, value)
+}
+
+export const del = async () => {
+  const client = createClient({ url })
+  await client.connect()
+
+  await client.del(key)
+}

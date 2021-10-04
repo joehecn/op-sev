@@ -37,8 +37,9 @@ export const initTCPServer = () => {
         remoteAddress,
         remotePort
       })
-  
-      connMap.set(`${remoteAddress}:${remotePort}`, conn)
+      
+      const _id = `${remoteAddress}:${remotePort}`
+      connMap.set(_id, conn)
     })
   
     // 收到packet
@@ -54,6 +55,7 @@ export const initTCPServer = () => {
           conn.serialPort = mapMsg.portnum
           conn.serialStatus = mapMsg.status
 
+          mapMsg._id = `${conn.remoteAddress}:${conn.remotePort}`
           emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
           break
         case 'versionback':

@@ -10,11 +10,15 @@ import * as clockin from '../controllers/ClockIn.js'
 
 import emitter from '../util/emitter.js'
 
-// import { getInfo } from '../udp/server.js'
+import {
+  list as getInfo,
+  getConn,
+  sendMsg
+} from '../tcp/server.js'
 
 let index = 0
 
-const send = ctx => {
+const send = (conn, ctx) => {
   console.log('---- send', Date.now())
   return new Promise((resolve, reject) => {
     const t = `${Date.now()}_${index++}`
@@ -29,7 +33,7 @@ const send = ctx => {
       resolve(data)
     })
 
-    ctx.sendUDPMsg(`c=b&t=${t}&${ctx.querystring}`)
+    sendMsg(conn, `c=b&t=${t}&${ctx.querystring}`)
   })
 }
 
@@ -68,38 +72,64 @@ router
   .get('/api/v1/clockin/list', jwt, clockin.list)
 
   .get('/api/v1/vue_api', jwt, async ctx => {
-    // console.log('---- vue_api in', Date.now())
-    // const info = getInfo()
-    // if (ctx.querystring === 'm=clientinfo') {
-    //   ctx.body = {
-    //     code: 0,
-    //     data: info
-    //   }
-    //   return
-    // }
+    console.log('---- vue_api in', Date.now())
+    const { m } = ctx.query
 
-    // if (!info.udpRemoteOnline) {
-    //   ctx.body = {
-    //     code: 0,
-    //     data: JSON.stringify({ message: 'UDP client is closed!' })
-    //   }
-    //   return
-    // }
-    // const data = await send(ctx)
-
-    // console.log('---- vue_api out', Date.now())
-    ctx.body = {
-      code: 0,
-      data: {}
+    if (m === 'clientinfo') {
+      const info = getInfo()
+      ctx.body = {
+        code: 0,
+        data: info
+      }
+      return
     }
-  })
 
-  .get('/api/v1/vue_api_t', jwt, async ctx => {
-    // ctx.sendUDPMsg(`$c=b&t=a&${ctx.querystring}`)
+    if (m === 'version') {
+      const { _id } = ctx.query
 
-    ctx.body = {
-      code: 0,
-      data: {}
+      // 查找 _id
+      const conn = getConn(_id)
+
+      if (!conn) {
+        ctx.body = {
+          code: 0,
+          data: JSON.stringify({ message: 'TCP client is closed!' })
+        }
+        return
+      }
+
+      const data = await send(conn, ctx)
+
+      console.log('---- vue_api out', Date.now())
+      ctx.body = {
+        code: 0,
+        data
+      }
+
+      return
+    }
+
+    if (m === 'card') {
+      const { _id } = ctx.query
+
+      // 查找 _id
+      const conn = getConn(_id)
+
+      if (!conn) {
+        ctx.body = {
+          code: 0,
+          data: JSON.stringify({ message: 'TCP client is closed!' })
+        }
+        return
+      }
+
+      const data = await send(conn, ctx)
+
+      console.log('---- vue_api out', Date.now())
+      ctx.body = {
+        code: 0,
+        data
+      }
     }
   })
 

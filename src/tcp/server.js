@@ -4,6 +4,8 @@ import { Connection } from './tcp-sev/index.js'
 import { TCP_LOCAL_PORT as port } from '../config/index.js'
 import { CONNECT } from './tcp-sev/lib/constants.js'
 
+import emitter from '../util/emitter.js'
+
 const connMap = new Map()
 
 const coverMsg = strMsg => {
@@ -19,9 +21,6 @@ const coverMsg = strMsg => {
 export const initTCPServer = () => {
   net.createServer(socket => {
     const conn = new Connection({ socket })
-  
-    // // 发送一个packet
-    // conn.write('hello world')
   
     conn.on('connect', () => {
       console.log('---- conn connect:')
@@ -57,10 +56,10 @@ export const initTCPServer = () => {
 
           emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
           break
-        // case 'versionback':
-        // case 'cardback':
-        //   emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
-        //   break
+        case 'versionback':
+        case 'cardback':
+          emitter.emit(mapMsg.t, JSON.stringify(mapMsg))
+          break
         default:
           break
       }
@@ -105,9 +104,9 @@ export const initTCPServer = () => {
   }).listen({ port }, () => console.log(`---- tcp server listening at ${port}`))
 }
 
-// export const list = () => [...connMap].map(([, value]) => value)
-export const getMap = () => connMap
-export const sendMsg = (key, message) => {
-  const conn = connMap.get(key)
+export const list = () => [...connMap].map(([, value]) => value)
+export const getConn = key => connMap.get(key)
+export const sendMsg = (conn, message) => {
+  console.log({ message })
   if (conn && conn.connected === CONNECT) conn.write(message)
 }

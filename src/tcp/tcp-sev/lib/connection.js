@@ -67,32 +67,43 @@ export default class Connection extends EventEmitter {
   }
 
   get localAddress() {
-    return this._socket && this._socket.localAddress
-
-  }
-
-  get localPort() {
-    return this._socket && this._socket.localPort
-  }
-
-  get remoteAddress() {
     if (this._socket) {
-      const remoteAddress = this._socket.remoteAddress
-      if (remoteAddress) {
-        return remoteAddress
+      const __localAddress = this._socket.localAddress
+      if (__localAddress) {
+        return __localAddress
       }
     }
     return this._options.host
   }
 
-  get remotePort() {
+  get localPort() {
     if (this._socket) {
-      const remotePort = this._socket.remotePort
-      if (remotePort) {
-        return remotePort
+      const __localPort = this._socket.localPort
+      if (__localPort) {
+        return __localPort
       }
     }
     return this._options.port
+  }
+
+  get remoteAddress() {
+    if (this._socket) {
+      const __remoteAddress = this._socket.remoteAddress
+      if (__remoteAddress) {
+        return __remoteAddress.replace('::ffff:', '')
+      }
+    }
+    return ''
+  }
+
+  get remotePort() {
+    if (this._socket) {
+      const __remotePort = this._socket.remotePort
+      if (__remotePort) {
+        return __remotePort
+      }
+    }
+    return null
   }
 
   get serialPort() {
@@ -292,5 +303,17 @@ export default class Connection extends EventEmitter {
       this._pendingTimers.push(timer)
     }
     return this
+  }
+
+  toJSON() {
+    return {
+      connected: this.connected,
+      localAddress: this.localAddress,
+      localPort: this.localPort,
+      remoteAddress: this.remoteAddress,
+      remotePort: this.remotePort,
+      serialPort: this.serialPort,
+      serialStatus: this.serialStatus
+    }
   }
 }

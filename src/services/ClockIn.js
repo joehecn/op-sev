@@ -28,7 +28,13 @@ const findOne = async (query, ctx) => {
 
 const list = async (query, ctx) => {
   const model = await ctx.model('ClockIn')
-  const res = await model.find(query).sort({ _id: -1 })
+
+  const option = {}
+  if (query.pass === 'pass') option.pass = true
+  else if (query.pass === 'unpass') option.pass = false
+
+  console.log({ query, option })
+  const res = await model.find(option).sort({ _id: -1 })
   return res
 }
 

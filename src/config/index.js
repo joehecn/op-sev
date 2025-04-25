@@ -9,6 +9,7 @@ const TCP_LOCAL_PORT = 41234
 
 let redis = 'redis_master'
 let domain = 'op-db'
+// let domain = 'fdb1'
 
 if (NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   redis = 'localhost'
@@ -19,6 +20,7 @@ console.log({ NODE_ENV, redis, domain })
 
 const REDIS_URL = `redis://${redis}:6379`
 const DB_HOST = `mongodb://opDbAdmin:FfdslaewqQQ2@${domain}:27017/`
+// const DB_HOST = `mongodb://e700191fad1c:5caee23e86@${domain}:37017/`
 
 // jwt
 const PASSWORD_SALT = 'salt for one punch, which is salty'

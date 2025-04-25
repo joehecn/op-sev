@@ -88,7 +88,8 @@ const _handleMsg = async ({ method, arg }, ctx) => {
 const lifecycle = async ctx => {
   const now = Date.now()
   const { id, ip, serialPort, count, msgs } = ctx.request.body
-  console.log({ id, ip, serialPort, count, msgs })
+  console.log({ id, ip, serialPort, count })
+  console.log(JSON.stringify(msgs, null, 2))
 
   doorMap[ip] = { count, serialPort, now }
 

@@ -34,8 +34,11 @@ const update = async (query, set, ctx) => {
   }, { upsert: false, new: false })
 
   if (res) {
-    const { cardNo } = res
-    await setCard(`card.${cardNo}`, JSON.stringify(res))
+    await delCard(`card.${res.cardNo}`)
+
+    const card = await model.findOne(query)
+    const { cardNo } = card
+    await setCard(`card.${cardNo}`, JSON.stringify(card))
   }
 
   return res
@@ -58,10 +61,17 @@ const list = async (query, ctx) => {
   return res
 }
 
+const listCard = async (query, ctx) => {
+  const model = await ctx.model('Card')
+  const res = await model.find(query)
+  return res
+}
+
 export {
   add,
   remove,
   update,
   findOne,
-  list
+  list,
+  listCard
 }

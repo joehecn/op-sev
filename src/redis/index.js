@@ -7,7 +7,7 @@ import {
   list as listDoor
 } from '../services/Door.js'
 import {
-  list as listCard,
+  listCard,
   update as updateCard
 } from '../services/Card.js'
 import {
@@ -25,6 +25,18 @@ const _init = async () => {
 
   const client = createClient({ url })
   await client.connect()
+
+  // 清除 client
+  // let keys = await client.keys('*')
+  // console.log(keys)
+  await client.flushAll()
+  // keys = await client.keys('*')
+  // console.log(keys)
+
+  // for (let i = 0, len = keys.length; i < len; i++) {
+  //   const key = keys[i]
+  //   await client.del(key)
+  // }
 
   for (let i = 0, len = doorArr.length; i < len; i++) {
     const door = doorArr[i]
@@ -54,35 +66,35 @@ export const replaceCard = async ({ oldCardId, newCardId, newCardType, card }, c
   await client.connect()
 
   await client.del(`card.${oldCardId}`)
-  await client.set(`card.${newCardId}`, {
-    cardId: card._id,
+  await client.set(`card.${newCardId}`, JSON.stringify({
+    _id: card._id,
     cardNo: newCardId,
     cardType: newCardType,
     doorIds: card.doorIds,
     username: card.username,
     realname: card.realname,
     userInfo: card.userInfo
-  })
+  }))
 
   await addHistory({
     cardId: card._id,
     cardNo: oldCardId,
     newCardNo: newCardId,
-    doorIds: card.doorIds,
+    doorIds: card.doorIds.map(({ _id }) => _id),
     username: card.username,
     realname: card.realname,
     userInfo: card.userInfo
   }, ctx)
 }
 
-export const set = async () => {
+export const set = async (key, value) => {
   const client = createClient({ url })
   await client.connect()
 
   await client.set(key, value)
 }
 
-export const del = async () => {
+export const del = async key => {
   const client = createClient({ url })
   await client.connect()
 

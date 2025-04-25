@@ -34,8 +34,11 @@ const update = async (query, set, ctx) => {
   }, { upsert: false, new: true })
 
   if (res) {
-    const { ip } = res
-    await setDoor(`door.${ip}`, JSON.stringify(res))
+    await delDoor(`card.${res.ip}`)
+
+    const door = await model.findOne(query)
+    const { ip } = door
+    await setDoor(`door.${ip}`, JSON.stringify(door))
   }
 
   return res

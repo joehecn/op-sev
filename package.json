@@ -1,6 +1,6 @@
 {
   "name": "op-sev",
-  "version": "1.0.11",
+  "version": "1.0.27",
   "description": "",
   "main": "src/main.js",
   "type": "module",

@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+
+  mongo:
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    container_name: op-db
+    image: mongo:4.2
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: opDbAdmin
+      MONGO_INITDB_ROOT_PASSWORD: FfdslaewqQQ2
+    volumes:
+      - op-db-volume:/data
+    networks:
+      - op-net
+
+  redis:
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    container_name: redis_master
+    image: redis:6-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    command: ["--appendonly", "yes"]
+    volumes:
+      - op-redis-volume:/data
+    networks:
+      - op-net
+
+  server:
+    container_name: op-sev
+    image: joehe/op-sev:1.0.27
+    restart: unless-stopped
+    ports:
+      - 4003:4003
+      - 41234:41234
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./logs:/server/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    networks:
+      - op-net
+
+volumes:
+  op-db-volume:
+  op-redis-volume:
+
+networks:
+  op-net:

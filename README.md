@@ -1,4 +1,19 @@
 # OP-SEV
+
+## 2025-04-25
+``` bash
+docker build -t joehe/op-sev:1.0.27 .
+docker compose up -d
+
+# user
+docker exec -it op-db mongo -u opDbAdmin -p FfdslaewqQQ2 --authenticationDatabase "admin"
+show dbs
+use octopus
+show collections
+db.users.find().pretty()
+db.users.insert({ "userName": "admin", "password": "fdc0cfa51519730a130046e4264b1636dcae7c3c3ed02c11d3571b2565ad7eeddbccfa543dc485051a0a5af24b4ab071ea2d837086233cc7216913472f627e0938254bae79c76a3f05a73289f717f41cf30b5009da73fc0326cc61f8a8525708665c8765a5220519a264ec985f956ed9b13d2945518a9cd6154371e80055efb3" })
+```
+
 - [] 数据导出 Excel
 - [] 数据库副本集
 - [] 数据备份和还原

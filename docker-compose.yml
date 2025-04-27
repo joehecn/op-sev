@@ -28,7 +28,7 @@ services:
       timeout: 5s
       retries: 3
     container_name: redis_master
-    image: redis:6-alpine
+    image: redis:5-alpine
     restart: unless-stopped
     ports:
       - 6379:6379

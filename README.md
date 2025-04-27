@@ -4,6 +4,8 @@
 ``` bash
 docker build -t joehe/op-sev:1.0.27 .
 docker compose up -d
+docker compose stop
+docker compose down
 
 # user
 docker exec -it op-db mongo -u opDbAdmin -p FfdslaewqQQ2 --authenticationDatabase "admin"
@@ -47,6 +49,7 @@ docker run --restart=always -d -v /"$PWD"/src:/server/src -v /"$PWD"/public:/ser
 47.242.32.120:4003
 ```
 
+ssh megaAdmin@192.168.1.152
 ssh -i C:\Users\HM\op\pem\id_rsa.pem -oPort=6000 root@47.242.32.120
 
 ## frp

@@ -1,4 +1,4 @@
-// node addUser.t.js
+// node t/addUser.t.js
 // admin 123123
 
 import crypto from 'crypto'
